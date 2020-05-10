@@ -141,7 +141,7 @@ echo_string_list( ArgName ) ->
     "\\\",\\\"value\\\":[$TMP]}\"\n\n">>.
 
 prefix() ->
-  <<"set -eu -o pipefail\n">>.
+  <<"#!/bin/bash\n\nset -eu -o pipefail\n">>.
 
 end_of_transmission() ->
   <<"echo '", ?EOT, "'\n">>.
