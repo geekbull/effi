@@ -40,7 +40,7 @@
 %%====================================================================
 
 % handle_request function
--export( [handle_request/2] ).
+-export( [handle_request/3] ).
 
 % helper functions for implementing effi modules
 -export( [get_type_info/2, create_port/2, listen_port/1] ).
@@ -196,11 +196,11 @@ main( CmdLine ) ->
 
 %% @doc Parses a request input file, processes it, and writes the reply output
 %%      file.
--spec handle_request( Request, Dir ) -> #{ atom() => _ }
+-spec handle_request( Request, Dir, ScriptFileName ) -> #{ atom() => _ }
 when Request :: #{ atom() => _ },
      Dir :: string().
 
-handle_request( Request, Dir ) ->
+handle_request( Request, Dir, ScriptFileName ) ->
 
   #{ app_id       := AppId,
      lambda       := Lambda,
@@ -224,7 +224,7 @@ handle_request( Request, Dir ) ->
 
   % run extended script
   Result =
-    case LangMod:run_extended_script( ExtendedScript, Dir ) of
+    case LangMod:run_extended_script( ExtendedScript, Dir, ScriptFileName ) of
 
       {ok, _Output, RetBindLst} ->
 
