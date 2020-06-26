@@ -110,7 +110,7 @@
 % Returns either ok or error followed by standard/error output binary. If the
 % run was successful also the return binding list is packaged in the return
 % value.
--callback run_extended_script( ExtendedScript :: binary(), Dir :: string() ) ->
+-callback run_extended_script( ExtendedScript :: binary(), Dir :: string(), ScriptFileName :: string() ) ->
     {ok, binary(), [#{ atom() => _ }]}
   | {error, binary()}.
 
@@ -148,7 +148,10 @@ main( CmdLine ) ->
         % extract working directory
         {dir, Dir} = lists:keyfind( dir, 1, OptLst ),
 
-        % extract request input file
+	% extract script file name
+        {script_file_name, ScriptFileName} = lists:keyfind( script_file_name, 1, OptLst ),
+
+	% extract request input file
         InputFile =
           case lists:keyfind( input_file, 1, OptLst ) of
             false           -> throw( help );
@@ -174,7 +177,7 @@ main( CmdLine ) ->
         Request = jsone:decode( B, [{keys, atom}] ),
 
         % handle request
-        Reply = handle_request( Request, Dir ),
+        Reply = handle_request( Request, Dir, ScriptFileName ),
 
         % write reply output file
         case file:write_file( OutputFile, jsone:encode( Reply ) ) of
@@ -198,7 +201,8 @@ main( CmdLine ) ->
 %%      file.
 -spec handle_request( Request, Dir, ScriptFileName ) -> #{ atom() => _ }
 when Request :: #{ atom() => _ },
-     Dir :: string().
+     Dir :: string(),
+     ScriptFileName :: string().
 
 handle_request( Request, Dir, ScriptFileName ) ->
 
