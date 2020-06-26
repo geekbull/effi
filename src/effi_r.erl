@@ -46,7 +46,7 @@
           end_of_transmission/0,
           suffix/0,
           process_script/1,
-          run_extended_script/2] ).
+          run_extended_script/3] ).
 
 
 %%====================================================================
@@ -173,13 +173,13 @@ process_script( Script ) ->
   Script.
 
 
--spec run_extended_script( ExtendedScript :: binary(), Dir :: string() ) ->
+-spec run_extended_script( ExtendedScript :: binary(), Dir :: string(), ScriptFileName :: string() ) ->
     {ok, binary(), [#{ atom() => _ }]}
   | {error, binary()}.
 
-run_extended_script( ExtendedScript, Dir ) ->
+run_extended_script( ExtendedScript, Dir, ScriptFileName ) ->
 
-  ScriptFile = string:join( [Dir, "__script.R"], "/" ),
+  ScriptFile = string:join( [Dir, ScriptFileName], "/" ),
   Call = "Rscript --vanilla __script.R",
 
   ok = file:write_file( ScriptFile, ExtendedScript ),
