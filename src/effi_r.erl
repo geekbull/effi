@@ -180,7 +180,7 @@ process_script( Script ) ->
 run_extended_script( ExtendedScript, Dir, ScriptFileName ) ->
 
   ScriptFile = string:join( [Dir, ScriptFileName], "/" ),
-  Call = "Rscript --vanilla __script.R",
+  Call = "Rscript --vanilla " ++ ScriptFileName,
 
   ok = file:write_file( ScriptFile, ExtendedScript ),
 
